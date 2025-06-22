@@ -80,7 +80,7 @@ func main() {
 
 	// Добавьте CORS middleware
 	c := cors.New(cors.Options{
-		AllowedOrigins:   []string{"http://localhost:3000", "https://frontend-alpha-nine-77.vercel.appp"},
+		AllowedOrigins:   []string{"http://localhost:3000", "https://frontend-alpha-nine-77.vercel.app"},
 		AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
 		AllowedHeaders:   []string{"Content-Type", "Authorization"},
 		AllowCredentials: true,
