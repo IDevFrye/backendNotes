@@ -10,6 +10,7 @@ import (
 
 	"github.com/gorilla/mux"
 	_ "github.com/lib/pq"
+	"github.com/rs/cors"
 )
 
 var db *sql.DB
@@ -77,8 +78,20 @@ func main() {
 	connectDB()
 	r := mux.NewRouter()
 
+	// Добавьте CORS middleware
+	c := cors.New(cors.Options{
+		AllowedOrigins:   []string{"http://localhost:3000", "https://ваш-фронтенд.vercel.app"},
+		AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
+		AllowedHeaders:   []string{"Content-Type", "Authorization"},
+		AllowCredentials: true,
+	})
+
+	// Роуты
 	r.HandleFunc("/notes", getNotes).Methods("GET")
 	r.HandleFunc("/notes", addNote).Methods("POST")
+
+	// Оберните роутер в CORS
+	handler := c.Handler(r)
 
 	port := os.Getenv("PORT")
 	if port == "" {
@@ -86,5 +99,5 @@ func main() {
 	}
 
 	fmt.Printf("Server is running on :%s\n", port)
-	log.Fatal(http.ListenAndServe(":"+port, r))
+	log.Fatal(http.ListenAndServe(":"+port, handler)) // Используйте handler вместо r
 }
